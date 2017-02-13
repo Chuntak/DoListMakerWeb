@@ -1,6 +1,7 @@
 package com.store.app.service;
 
 import com.google.appengine.api.datastore.Entity;
+import com.store.app.domain.Item;
 import com.store.app.domain.ToDoList;
 import org.springframework.ui.ModelMap;
 
@@ -16,8 +17,9 @@ public interface ToDoListServiceInterface {
     public boolean saveDoListEntity(final String email, final boolean priv, final String listName, final long iD);
     public ArrayList<ToDoList> getToDoListArrayEntity(ToDoList tDL);
     public ArrayList<ToDoList> getToDoListArrayByEmail(ToDoList tDL);
+    public ArrayList<Item> getItemByListID(ToDoList tDL);
     public Entity updateDoListEntity(Entity entity);
     public Entity updateItemEntity(Entity entity);
-    //public boolean deleteItemEntity(Entity entity);
+    public boolean deleteItemEntity(Entity entity);
 //    public ToDoList getToDoListEntity(ToDoList tDL);
 }

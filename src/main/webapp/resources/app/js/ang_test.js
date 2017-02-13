@@ -50,4 +50,8 @@ app.controller('myCtrl', function ($scope, $http) {
         });
     }
 
+    $scope.close = function(result) {
+        close(result, 500); // close, but give 500ms for bootstrap to animate
+    };
+
 });

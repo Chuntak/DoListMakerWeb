@@ -169,137 +169,26 @@
             </span>
         </button>
         </span>
-
     </div>
 
-    <!-- Footer -->
-    <div id="footer" style="margin-bottom: 20px">
-        <div style="text-align: center;">
-            MIT License
-        </div>
-    </div>
-
-
-
-    <!-- Modal New Category -->
-    <div class="modal fade" id="new-category-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form role="form" id="category-add-form" action="#" method="post" accept-charset="utf-8">
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">New Category</h4>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <!-- Mensajes post ajax request -->
-                        <div class="alert alert-success alert-dismissible" style="display: none;" role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            You have registered the category!
-                        </div>
-                        <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            An error has occurred, try again or you can also try reloading the page if the error persists!
-                        </div>
-
-                        <div class="form-group">
-                            <label for="category-name"><span class="glyphicon glyphicon-folder-close"></span> Name</label>
-                            <input type="text" class="form-control" id="category-name" name="category-name" placeholder="Eje: Laptops">
-                            <span class="help-block" style="display: none;">Requerido</span>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </div>
-
-                </form>
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Yes or No?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>It's your call...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="close(false)" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal to edit the category name -->
-    <div class="modal fade" id="edit-category-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form role="form" id="category-edit-form" action="#" method="post" accept-charset="utf-8">
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Edit the category name</h4>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <!-- Mensajes post ajax request -->
-                        <div class="alert alert-success alert-dismissible" style="display: none;" role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            Category has been edited!
-                        </div>
-                        <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            An error has occurred, try again or you can also try reloading the page if the error persists!
-                        </div>
-
-                        <input type="hidden" id="edit-category-id" name="edit-category-id">
-
-                        <div class="form-group">
-                            <label for="edit-category-name"><span class="glyphicon glyphicon-folder-close"></span> Nombre</label>
-                            <input type="text" class="form-control" id="edit-category-name" name="edit-category-name" placeholder="Eje: Laptops">
-                            <span class="help-block" style="display: none;">Requerido</span>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal to delete the category -->
-    <div class="modal fade" id="delete-category-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form role="form" id="category-delete-form" action="#" method="post" accept-charset="utf-8">
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
-                        <h4 class="modal-title">Do you really want to delete this category?</h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <input type="hidden" id="delete-category-id" name="delete-category-id">
-
-                        <h3 class="text-danger" id="delete-category-name" style="margin-top: 0; margin-bottom: 0;"></h3>
-
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input id="delete-category-branch" type="checkbox"> And daughters categories also
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer" style="margin-top: 0;">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Confirm</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 

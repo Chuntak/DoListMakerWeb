@@ -67,8 +67,7 @@ public class HomeController {
     @RequestMapping(value = "/getItems", method = RequestMethod.GET)
     public @ResponseBody ArrayList<Item> getItems(@ModelAttribute("TodoListModel") ToDoList list){
         //int listId = list.();
-        ArrayList<Item> lists = new ArrayList<Item>();
-        return lists;
+        return toDoListService.getItemByListID(list);
     }
 
     /*
@@ -117,7 +116,7 @@ public class HomeController {
     * */
     @RequestMapping(value = "/deleteItem", method = RequestMethod.GET)
     public @ResponseBody boolean deleteItem(@ModelAttribute("ItemModel") Item item){
-        return false;
+        return toDoListService.deleteItemEntity(item.getEntity()) ;
     }
 
 

@@ -40,33 +40,18 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
 
     public Entity updateDoListEntity(Entity entity) {
        // ToDoList tdl = new ToDoList( (String) entity.getProperty(EMAIL),(Boolean) entity.getProperty(PRIVATE),(String) entity.getProperty(LIST_NAME));
-        Query query = new Query(TO_DO_LIST_ENTITY);
-        Entity ent = null;
-        for (Entity e : datastoreService.prepare(query).asIterable()){
-            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID))){
-                ent = e;
-                break;
-            }
-        }
+        Entity ent = getEntityByID(entity, TO_DO_LIST_ENTITY);
         if(ent != null) {
             if (entity.hasProperty(EMAIL)) ent.setProperty(EMAIL, entity.getProperty(EMAIL));
             if (entity.hasProperty(PRIVATE)) ent.setProperty(PRIVATE, entity.getProperty(PRIVATE));
             if (entity.hasProperty(LIST_NAME)) ent.setProperty(LIST_NAME, entity.getProperty(LIST_NAME));
             SaveTransactions(ent);
-            return ent;
         }
-        return null;
+        return ent;
     }
 
     public Entity updateItemEntity(Entity entity){
-        Query query = new Query(ITEM_ENTITY);
-        Entity ent = null;
-        for (Entity e : datastoreService.prepare(query).asIterable()){
-            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID))){
-                ent = e;
-                break;
-            }
-        }
+        Entity ent = getEntityByID(entity, ITEM_ENTITY);
         if(ent != null) {
             if (entity.hasProperty(LIST_ID)) ent.setProperty(LIST_ID, entity.getProperty(LIST_ID));
             if (entity.hasProperty(CATEGORY)) ent.setProperty(CATEGORY, entity.getProperty(CATEGORY));
@@ -76,12 +61,21 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
             if (entity.hasProperty(COMPLETED)) ent.setProperty(COMPLETED, entity.getProperty(COMPLETED));
             if (entity.hasProperty(POSITION_IN_LIST)) ent.setProperty(POSITION_IN_LIST, entity.getProperty(POSITION_IN_LIST));
             SaveTransactions(ent);
-            return ent;
         }
-        return null;
+        return ent;
     }
 
-    //private Entity getEntityByID(Entity )
+    private Entity getEntityByID(Entity entity, String kind){
+        Query query = new Query(kind);
+        Entity ent = null;
+        for (Entity e : datastoreService.prepare(query).asIterable()){
+            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID))){
+                ent = e;
+                break;
+            }
+        }
+        return ent;
+    }
 
     private boolean SaveTransactions(Entity entity){
         saveTransactions(entity);
@@ -127,6 +121,37 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
             }
         }
         return filteredList;
+    }
+
+    public ArrayList<Item> getItemByListID(ToDoList tDL) {
+        ArrayList<Item> itemArray = new ArrayList<Item>();
+        Query query = new Query(ITEM_ENTITY);
+        for(Entity entity : datastoreService.prepare(query).asIterable()) {
+            if(tDL.getID() == entity.getProperty(LIST_ID)){
+                itemArray.add(new Item(entity));
+            }
+        }
+        return itemArray;
+    }
+
+    public boolean deleteItemEntity(Entity entity) {
+        Entity ent = getEntityByID(entity, ITEM_ENTITY);
+        boolean deleted = false;
+        Transaction transaction = datastoreService.beginTransaction();
+        try {
+            // save entity in dataStore
+            datastoreService.delete(ent.getKey());
+            transaction.commit();
+            deleted = true;
+        } catch(Exception e) {
+            deleted = false;
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+                deleted = false;
+            }
+        }
+        return deleted;
     }
 
 //    @Override
