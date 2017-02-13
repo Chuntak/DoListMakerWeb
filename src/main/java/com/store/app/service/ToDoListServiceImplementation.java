@@ -25,7 +25,8 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
         this.datastoreService = datastoreServiceFactory.getDatastoreService();
     }
 
-    public boolean saveItemEntity(final int listId, final String category, final String description,
+
+    public boolean saveItemEntity(final long listId, final String category, final String description,
                                   final Date startDate, final Date endDate, final boolean completed, final int positionInList, final long id) {
         Item it = new Item(listId, category, description, startDate, endDate, completed, positionInList, id);
         Entity itEntity = it.getEntity();
@@ -123,6 +124,18 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
         return filteredList;
     }
 
+    public ArrayList<ToDoList> getViewableToDoListArray(ToDoList tDL) {
+        ArrayList<ToDoList> filteredList = new ArrayList<ToDoList>();
+        for(ToDoList tdl : getToDoListArrayEntity(tDL)){
+            if(tdl.getEmail().equals(tDL.getEmail())){
+                filteredList.add(tdl);
+            } else if (tdl.getPrivate() == false){
+                filteredList.add(tdl);
+            }
+        }
+        return filteredList;
+    }
+
     public ArrayList<Item> getItemByListID(ToDoList tDL) {
         ArrayList<Item> itemArray = new ArrayList<Item>();
         Query query = new Query(ITEM_ENTITY);
@@ -152,6 +165,37 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
             }
         }
         return deleted;
+    }
+
+    private boolean entityExist(Entity entity){
+        Query query = new Query(entity.getKey().getKind());
+        for (Entity e : datastoreService.prepare(query).asIterable()) {
+            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID)))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean updateAllDoListEntity(ArrayList<ToDoList> toDoListList){
+        for(ToDoList tdl : toDoListList){
+            if(entityExist(tdl.getEntity())){
+                updateDoListEntity(tdl.getEntity());
+            } else{
+                saveDoListEntity(tdl.getEmail(),tdl.getPrivate(),tdl.getListName(), tdl.getID());
+            }
+        }
+        return true;
+    }
+
+    public boolean updateAllItemEntity(ArrayList<Item> itemList){
+        for(Item iL : itemList){
+            if(entityExist(iL.getEntity())){
+                updateItemEntity(iL.getEntity());
+            } else {
+                saveItemEntity(iL.getListId(),iL.getCategory(),iL.getDescription(),iL.getStartDate(),iL.getEndDate(),iL.getCompleted(), iL.getPositionInList(), iL.getID());
+            }
+        }
+        return true;
     }
 
 //    @Override

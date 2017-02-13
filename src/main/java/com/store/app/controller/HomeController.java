@@ -71,12 +71,31 @@ public class HomeController {
     }
 
     /*
+    *  Add all list
+     */
+    @RequestMapping(value = "/addAllList", method = RequestMethod.GET)
+    public @ResponseBody boolean addAllList(@ModelAttribute("TodoListModel") ArrayList<ToDoList> listList){
+        return toDoListService.updateAllDoListEntity(listList);
+    }
+
+
+
+    /*
     * Add a new list
     * */
     @RequestMapping(value = "/addList", method = RequestMethod.GET)
     public @ResponseBody boolean addList(@ModelAttribute("TodoListModel") ToDoList list){
         return toDoListService.saveDoListEntity(list.getEmail(), list.getPrivate(), list.getListName(), list.getID());
     }
+
+    /*
+*  Add all item
+ */
+    @RequestMapping(value = "/addAllItem", method = RequestMethod.GET)
+    public @ResponseBody boolean addAllItem(@ModelAttribute("TodoListModel") ArrayList<Item> itemList){
+        return toDoListService.updateAllItemEntity(itemList);
+    }
+
 
     /*
     * Add a new item

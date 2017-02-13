@@ -26,7 +26,7 @@ public class Item {
 
     public Item(Entity e) { entity = e; entity.setProperty(ID, entity.getKey().getId()); }
 
-    public Item(final int listId, final String category, final String description,
+    public Item(final long listId, final String category, final String description,
                 final Date startDate, final Date endDate, final boolean completed, final int positionInList, final long id){
         entity.setProperty(LIST_ID, listId);
         entity.setProperty(CATEGORY, category);
@@ -38,7 +38,7 @@ public class Item {
         entity.setProperty(ID, entity.getKey().getId());
     }
 
-    public int getListId() { return (Integer) entity.getProperty(LIST_ID);}
+    public long getListId() { return (Integer) entity.getProperty(LIST_ID);}
     public String getCategory() { return (String) entity.getProperty(CATEGORY); }
     public String getDescription() { return (String) entity.getProperty(DESCRIPTION); }
     public Date getStartDate() { return (Date) entity.getProperty(START_DATE); }
@@ -47,7 +47,7 @@ public class Item {
     public int getPositionInList() { return (Integer) entity.getProperty(POSITION_IN_LIST); }
     public long getID() { return (Integer) entity.getProperty(ID); }
 
-    public void setListId(int listId) { entity.setProperty(LIST_ID, listId); }
+    public void setListId(long listId) { entity.setProperty(LIST_ID, listId); }
     public void setCategory(String category) {  entity.setProperty(CATEGORY, category); }
     public void setDescription(String description) { entity.setProperty(DESCRIPTION, description);  }
     public void setStartDate(Date startDate) { entity.setProperty(START_DATE, startDate); }

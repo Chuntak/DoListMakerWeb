@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by Chuntak on 2/12/2017.
  */
 public interface ToDoListServiceInterface {
-    public boolean saveItemEntity(final int listId, final String category, final String description,
+    public boolean saveItemEntity(final long listId, final String category, final String description,
                                    final Date startDate, final Date endDate, final boolean completed, final int positionsInList, final long id);
     public boolean saveDoListEntity(final String email, final boolean priv, final String listName, final long iD);
     public ArrayList<ToDoList> getToDoListArrayEntity(ToDoList tDL);
@@ -21,5 +21,8 @@ public interface ToDoListServiceInterface {
     public Entity updateDoListEntity(Entity entity);
     public Entity updateItemEntity(Entity entity);
     public boolean deleteItemEntity(Entity entity);
+
+    public boolean updateAllDoListEntity(ArrayList<ToDoList> toDoListList);
+    public boolean updateAllItemEntity(ArrayList<Item> itemList);
 //    public ToDoList getToDoListEntity(ToDoList tDL);
 }

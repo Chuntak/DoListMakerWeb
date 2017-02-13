@@ -23,98 +23,45 @@
 
     <title>TODO LIST MAKER</title>
 
-    <%--<!-- Favicon -->--%>
-    <%--<link rel="icon" type="image/png" href="<c:url value="/favicon.ico" />">--%>
-
-    <%--<!-- Bootstrap -->--%>
-    <%--<link rel="stylesheet" media="screen" href="<c:url value="/resources/library-vendor/bootstrap/css/bootstrap.min.css" />" >--%>
-
-    <%--<!-- Normalize  for improved cross-browser rendering -->--%>
-    <%--<link rel="stylesheet" href="<c:url value="/resources/library-vendor/normalize/normalize.css" />" >--%>
-
-    <%--<!-- Google Code Prettify -->--%>
-    <%--<link rel="stylesheet" href="<c:url value="/resources/library-vendor/google-code-prettify/prettify.css" />">--%>
-    <%--<link rel="stylesheet" href="<c:url value="/resources/library-vendor/google-code-prettify/desert.css" />">--%>
-
-    <%--<!-- jqTree -->--%>
-    <%--<link rel="stylesheet" href="<c:url value="/resources/library-vendor/jqTree-master/jqtree.css" />">--%>
-
-    <%--<!-- Pnotify - pinesframework  -->--%>
-    <%--<link rel="stylesheet" href="<c:url value="/resources/library-vendor/pnotify/pnotify.custom.min.css" />">--%>
-
-    <%--<style>--%>
-    <%--body {--%>
-    <%--padding-top: 50px;--%>
-    <%--}--%>
-    <%--.main-container {--%>
-    <%--padding: 40px 15px;--%>
-    <%--}--%>
-
-    <%--.pull-left {--%>
-    <%--float: left !important;--%>
-    <%--}--%>
-    <%--.pull-right {--%>
-    <%--float: right !important;--%>
-    <%--}--%>
-
-    <%--/* tree  */--%>
-    <%--ul.jqtree-tree .jqtree-element {--%>
-    <%--position: relative;--%>
-
-    <%--/* Store - new css */--%>
-    <%--padding: 7px;--%>
-    <%--border-radius: 4px;--%>
-    <%--}--%>
-
-    <%--ul.jqtree-tree li {--%>
-    <%--/* Store - new css */--%>
-    <%--border: 1px solid #143546;--%>
-    <%--margin: 7px;--%>
-    <%--border-radius: 4px;--%>
-    <%--}--%>
-    <%--ul.jqtree-tree span.jqtree-border {--%>
-    <%--/* Store - new css */--%>
-    <%--padding: 7px;--%>
-    <%--border-radius: 4px;--%>
-    <%--}--%>
-    <%--/* tree ends */--%>
-    <%--</style>--%>
-
 </head>
-<body>
+<body ng-app="myApp" ng-controller="myCtrl">
 
-<div id="toolbar" ng-app="myApp" ng-controller="myCtrl">
-    <button type="button" class="btn btn-success">
-    <span class="glyphicon glyphicon-plus-sign">
-        <a href="#" data-toggle="tooltip" title="Create">Create</a>
-    </span>
-    </button>
+<%--App Content START--%>
+<div class="app-wrapper">
+    <div id="toolbar">
+        <%--<input ng-click="newList()" type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="Create" >--%>
+        <%--<span class="glyphicon glyphicon-plus-sign"></span>--%>
+        <%--</input>--%>
+        <button ng-click="newList()"  type="button" class="btn btn-success" data-toggle="tooltip" title="Create" data-placement="bottom">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
 
-    <button type="button" ng-click="getToDoList()" class="btn btn-default">
-    <span class="glyphicon glyphicon-folder-open">
-        <a href="#" data-toggle="tooltip" title="Load">Load</a>
-    </span>
-    </button>
+        <button ng-click="loadList()" type="button" class="btn btn-default" data-toggle="tooltip" title="Load" data-placement="bottom">
+            <span class="glyphicon glyphicon-folder-open"></span>
+        </button>
 
-    <button type="button" ng-click="save()" class="btn btn-primary">
-    <span class="glyphicon glyphicon-floppy-disk">
-        <a href="#" data-toggle="tooltip" title="Save">Save</a>
-    </span>
-    </button>
+        <button ng-disabled="!listForm.$dirty" type="button" class="btn btn-primary" data-toggle="tooltip" title="Save" data-placement="bottom">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+        </button>
 
+        <button ng-click="logout()" type="submit" class="btn btn-default" data-toggle="tooltip" title="Logout" data-placement="bottom">
+            <span class="glyphicon glyphicon-log-out"></span>
+        </button>
 
+    </div>
 
-
-    <div id="mid">
+    <div id="mid" ng-show="show">
         <h1>To Do List</h1>
     </div>
 
-    <div id="details">
+    <div id="details" ng-show="show">
         <h2>Details</h2>
         <br/>
         <div class="form-group">
-            <label for="nameOfList">Name of List:</label>
-            <input type="text" class="form-control" id="nameOfList">
+            <form name="listForm">
+                <label for="nameOfList">Name of List:</label>
+                <input type="text" class="form-control" id="nameOfList" ng-model="nameOfList">
+            </form>
         </div>
         <div class="form-group">
             <label for="author">Author:</label>
@@ -122,75 +69,79 @@
         </div>
     </div>
 
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a ng-click="getToDoList()"  data-toggle="collapse" href="#collapse4">Get to do list</a>
-                </h4>
-            </div>
-            <div id="collapse4" class="panel-collapse collapse" >
-                <select ng-model="selectedList" ng-options="toDoList.listName for toDoList in userToDoList">
-                </select>
-                <button type="button" ng-click="updateList()">Update</button>
-                <%--<div ng-repeat="toDoList in userToDoList">--%>
-                    <%--<h4> {{toDoList.entity.key.id}} {{toDoList.email}} {{toDoList.private}} {{toDoList.listName}} </h4>--%>
-                <%--</div>--%>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="items">
+    <div id="items" ng-show="show">
         <h3>Items</h3>
         <span id="item-btns">
 
+                <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus-sign">
+                <a href="#" data-toggle="tooltip" title="Create">Add Item</a>
+            </span>
+            </button>
+
+
             <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-plus-sign">
-            <a href="#" data-toggle="tooltip" title="Create">Add Item</a>
-        </span>
-        </button>
+                <a href="#" data-toggle="tooltip" title="Save">Delete Item</a>
+                <span class="glyphicon glyphicon-minus-sign"></span>
+            </button>
 
+            <button type="button" class="btn btn-default">
+                <span class="glyphicons glyphicons-circle-arrow-top">
+                    <a href="#" data-toggle="tooltip" title="Save">Move Item Up</a>
+                </span>
+            </button>
 
-        <button type="button" class="btn btn-default">
-            <a href="#" data-toggle="tooltip" title="Save">Delete Item</a>
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-
-        <button type="button" class="btn btn-default">
-            <span class="glyphicons glyphicons-circle-arrow-top">
-                <a href="#" data-toggle="tooltip" title="Save">Move Item Up</a>
+            <button type="button" class="btn btn-default">
+                <span class="glyphicons glyphicons-circle-arrow-down">
+                    <a href="#" data-toggle="tooltip" title="Save">Move Item Down</a>
+                </span>
+            </button>
             </span>
-        </button>
 
-        <button type="button" class="btn btn-default">
-            <span class="glyphicons glyphicons-circle-arrow-down">
-                <a href="#" data-toggle="tooltip" title="Save">Move Item Down</a>
-            </span>
-        </button>
-        </span>
     </div>
+</div>
+<%--App Content END--%>
 
-    <div class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
+<!-- Modal New Category -->
+<div class="modal fade" id="new-category-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="category-add-form" action="#" method="post" accept-charset="utf-8">
+
                 <div class="modal-header">
-                    <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Yes or No?</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">New Category</h4>
                 </div>
+
                 <div class="modal-body">
-                    <p>It's your call...</p>
+
+                    <!-- Mensajes post ajax request -->
+                    <div class="alert alert-success alert-dismissible" style="display: none;" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        You have registered the category!
+                    </div>
+                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        An error has occurred, try again or you can also try reloading the page if the error persists!
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category-name"><span class="glyphicon glyphicon-folder-close"></span> Name</label>
+                        <input type="text" class="form-control" id="category-name" name="category-name" placeholder="Eje: Laptops">
+                        <span class="help-block" style="display: none;">Requerido</span>
+                    </div>
+
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" ng-click="close(false)" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
                 </div>
-            </div>
+
+            </form>
         </div>
     </div>
-
 </div>
-
 
 <!-- JavaScripts -->
 <section>
