@@ -6,11 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DatastoreServiceFactoryImplementation implements DatastoreServiceFactoryInterface {
-
     private DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-
     public DatastoreService getDatastoreService(){
         return datastoreService;
     }
-
 }
