@@ -40,7 +40,7 @@ app.controller('myCtrl', function ($scope, $http) {
         var y = $http({
             method: 'GET',
             url: '/updateList',
-            params: {"id":$scope.selectedList.entity.properties.real_ID, "email":"OMG@gmail.com", "listName":"Changed"}
+            params: {"iD":$scope.selectedList.entity.properties.real_ID, "email":"OMG@gmail.com", "listName":"Changed"}
         }).then(function (response) {
             $scope.responseData = response.data;
             alert("it worked!");

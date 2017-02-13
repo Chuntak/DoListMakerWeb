@@ -11,7 +11,7 @@ public class ToDoList {
     public static final String EMAIL = "email";
     public static final String PRIVATE = "private";
     public static final String LIST_NAME = "listName";
-    public static final String ID = "real_ID";
+    private static final String ID = "real_ID";
 
     public static final String TO_DO_LIST_ENTITY     = "Todolist";
 
@@ -25,8 +25,6 @@ public class ToDoList {
         entity.setProperty(EMAIL, email);
         entity.setProperty(PRIVATE, priv);
         entity.setProperty(LIST_NAME, listName);
-        if(iD == -1)   entity.setProperty(ID, entity.getKey().getId());
-        else entity.setProperty(ID, iD);
     }
 
     public void setEntity(Entity e) { entity = e; }
@@ -37,6 +35,6 @@ public class ToDoList {
     public void setEmail(String email) { entity.setProperty(EMAIL, email); }
     public void setPrivate(boolean priv) { entity.setProperty(PRIVATE, priv); }
     public void setListName(String listName) { entity.setProperty(LIST_NAME, listName);}
-    public void setID(long id) { if(id == -1) entity.setProperty(ID, entity.getKey().getId()); else entity.setProperty(ID, id); }
+    public void setID(long id) { entity.setProperty(ID, id); }
     public Entity getEntity() {  return entity; }
 }

@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.store.app.domain.Item.*;
 import static com.store.app.domain.ToDoList.*;
 
 /**
@@ -25,8 +26,8 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
     }
 
     public boolean saveItemEntity(final int listId, final String category, final String description,
-                                  final Date startDate, final Date endDate, final boolean completed, final int positionInList) {
-        Item it = new Item(listId, category, description, startDate, endDate, completed, positionInList);
+                                  final Date startDate, final Date endDate, final boolean completed, final int positionInList, final long id) {
+        Item it = new Item(listId, category, description, startDate, endDate, completed, positionInList, id);
         Entity itEntity = it.getEntity();
         return SaveTransactions(itEntity);
     }
@@ -40,11 +41,9 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
     public Entity updateDoListEntity(Entity entity) {
        // ToDoList tdl = new ToDoList( (String) entity.getProperty(EMAIL),(Boolean) entity.getProperty(PRIVATE),(String) entity.getProperty(LIST_NAME));
         Query query = new Query(TO_DO_LIST_ENTITY);
-   //     Query.Filter keyFilter = new Query.FilterPredicate(ID, Query.FilterOperator.EQUAL, entity.getProperty(ID));
-   //     query.setFilter(keyFilter);
         Entity ent = null;
         for (Entity e : datastoreService.prepare(query).asIterable()){
-            if(e.getProperty(ID) == entity.getProperty(ID)){
+            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID))){
                 ent = e;
                 break;
             }
@@ -56,14 +55,38 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
             SaveTransactions(ent);
             return ent;
         }
-        return entity;
+        return null;
     }
+
+    public Entity updateItemEntity(Entity entity){
+        Query query = new Query(ITEM_ENTITY);
+        Entity ent = null;
+        for (Entity e : datastoreService.prepare(query).asIterable()){
+            if(((Long)e.getProperty(ID)).equals((Long)entity.getProperty(ID))){
+                ent = e;
+                break;
+            }
+        }
+        if(ent != null) {
+            if (entity.hasProperty(LIST_ID)) ent.setProperty(LIST_ID, entity.getProperty(LIST_ID));
+            if (entity.hasProperty(CATEGORY)) ent.setProperty(CATEGORY, entity.getProperty(CATEGORY));
+            if (entity.hasProperty(DESCRIPTION)) ent.setProperty(DESCRIPTION, entity.getProperty(DESCRIPTION));
+            if (entity.hasProperty(START_DATE)) ent.setProperty(START_DATE, entity.getProperty(START_DATE));
+            if (entity.hasProperty(END_DATE)) ent.setProperty(END_DATE, entity.getProperty(END_DATE));
+            if (entity.hasProperty(COMPLETED)) ent.setProperty(COMPLETED, entity.getProperty(COMPLETED));
+            if (entity.hasProperty(POSITION_IN_LIST)) ent.setProperty(POSITION_IN_LIST, entity.getProperty(POSITION_IN_LIST));
+            SaveTransactions(ent);
+            return ent;
+        }
+        return null;
+    }
+
+    //private Entity getEntityByID(Entity )
 
     private boolean SaveTransactions(Entity entity){
         saveTransactions(entity);
         entity.setProperty(ID,entity.getKey().getId());
         return saveTransactions(entity);
-
     }
 
     private boolean saveTransactions(Entity entity){
@@ -97,25 +120,24 @@ public class ToDoListServiceImplementation implements ToDoListServiceInterface {
     }
 
     public ArrayList<ToDoList> getToDoListArrayByEmail(ToDoList tDL) {
-        ArrayList<ToDoList> tDLArray = new ArrayList<ToDoList>();
-        Query query = new Query(TO_DO_LIST_ENTITY);
-        Query.Filter keyFilter = new Query.FilterPredicate(EMAIL, Query.FilterOperator.EQUAL, tDL.getEmail());
-        for (Entity entity : datastoreService.prepare(query).asIterable()) {
-            ToDoList model = new ToDoList(entity);
-            tDLArray.add(model);
+        ArrayList<ToDoList> filteredList = new ArrayList<ToDoList>();
+        for(ToDoList tdl : getToDoListArrayEntity(tDL)){
+            if(tdl.getEmail().equals(tDL.getEmail())){
+                filteredList.add(tdl);
+            }
         }
-        return tDLArray;
+        return filteredList;
     }
 
-    @Override
-    public ToDoList getToDoListEntity(ToDoList tDL) {
-        Query query = new Query(TO_DO_LIST_ENTITY);
-        Query.Filter keyFilter =
-                new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.EQUAL, tDL.getEntity().getKey());
-        query.setFilter(keyFilter);
-        ToDoList model = new ToDoList(datastoreService.prepare(query).asSingleEntity());
-        return model;
-    }
+//    @Override
+//    public ToDoList getToDoListEntity(ToDoList tDL) {
+//        Query query = new Query(TO_DO_LIST_ENTITY);
+//        Query.Filter keyFilter =
+//                new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.EQUAL, tDL.getEntity().getKey());
+//        query.setFilter(keyFilter);
+//        ToDoList model = new ToDoList(datastoreService.prepare(query).asSingleEntity());
+//        return model;
+//    }
 
 
 }

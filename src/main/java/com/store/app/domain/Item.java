@@ -18,7 +18,7 @@ public class Item {
     public static final String POSITION_IN_LIST = "positionInList";
     public static final String ID = "real_ID";
 
-    private static final String ITEM_ENTITY     = "Item";
+    public static final String ITEM_ENTITY     = "Item";
 
     /*THIS ASSIGNES A UNIT NUMERIC ID AND INITIALIZES AN ENTITY FOR ITEMS*/
     private Entity entity = new Entity(ITEM_ENTITY);
@@ -27,7 +27,7 @@ public class Item {
     public Item(Entity e) { entity = e; entity.setProperty(ID, entity.getKey().getId()); }
 
     public Item(final int listId, final String category, final String description,
-                final Date startDate, final Date endDate, final boolean completed, final int positionInList){
+                final Date startDate, final Date endDate, final boolean completed, final int positionInList, final long id){
         entity.setProperty(LIST_ID, listId);
         entity.setProperty(CATEGORY, category);
         entity.setProperty(DESCRIPTION, description);

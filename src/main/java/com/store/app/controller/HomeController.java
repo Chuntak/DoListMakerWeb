@@ -50,9 +50,7 @@ public class HomeController {
     * */
     @RequestMapping(value = "/getMyLists", method = RequestMethod.GET)
     public @ResponseBody ArrayList<ToDoList> getMyLists(@ModelAttribute("TodoListModel") ToDoList user){
-        String email = user.getEmail();
-        ArrayList<ToDoList> lists = new ArrayList<ToDoList>();
-        return lists;
+        return toDoListService.getToDoListArrayByEmail(user);
     }
 
     /*
@@ -60,9 +58,7 @@ public class HomeController {
     * */
     @RequestMapping(value = "/getAllLists", method = RequestMethod.GET)
     public @ResponseBody ArrayList<ToDoList> getAllLists(@ModelAttribute("TodoListModel") ToDoList user){
-        String email = user.getEmail();
-        ArrayList<ToDoList> lists = new ArrayList<ToDoList>();
-        return lists;
+        return toDoListService.getToDoListArrayEntity(user);
     }
 
     /*
@@ -88,7 +84,7 @@ public class HomeController {
     * */
     @RequestMapping(value = "/addItem", method = RequestMethod.GET)
     public @ResponseBody boolean addItem(@ModelAttribute("ItemModel") Item item){
-        return false;
+        return toDoListService.saveItemEntity(item.getListId(),item.getCategory(),item.getDescription(),item.getStartDate(),item.getEndDate(),item.getCompleted(),item.getPositionInList(),item.getID());
     }
 
     /*
@@ -104,8 +100,8 @@ public class HomeController {
     * Update an existing item with new data
     * */
     @RequestMapping(value = "/updateItem", method = RequestMethod.GET)
-    public @ResponseBody boolean addList(@ModelAttribute("ItemModel") Item item){
-        return false;
+    public @ResponseBody Entity updateItem(@ModelAttribute("ItemModel") Item item){
+        return toDoListService.updateItemEntity(item.getEntity());
     }
 
     /*
@@ -124,54 +120,7 @@ public class HomeController {
         return false;
     }
 
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
-/*         BELOW IS CODE FROM PREV PROJ. KEEP ONLY TO OBSERVE INTERACTION WITH DATA STORE        */
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
-/*  //////////////////////////////////////////////////////////////////////////////////////////  */
 
-
-//
-//    @RequestMapping(value = "get-tree", method=RequestMethod.POST, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ArrayList<ModelMap> getTree() {
-//
-//        return treeService.getTree();
-//
-//    }
-//
-//    @RequestMapping(value = "new-category", method=RequestMethod.POST, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ModelMap newCategory(@RequestBody ModelMap map) {
-//
-//        String name = map.get("name").toString();
-//        return  treeService.save(name);
-//
-//    }
-//
-//    @RequestMapping(value = "delete-category", method=RequestMethod.POST, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ModelMap deleteCategory(@RequestBody ModelMap map) {
-//
-//        return  treeService.deleteCategory(map);
-//
-//    }
-//
-//    @RequestMapping(value = "update-tree", method=RequestMethod.POST, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ModelMap updateTree(@RequestBody ModelMap map) {
-//        return  treeService.updateTree(map);
-//    }
-//
-//    @RequestMapping(value = "edit-category", method=RequestMethod.POST, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ModelMap editCategory(@RequestBody ModelMap map) {
-//
-//        return  treeService.editCategory(map);
-//
-//    }
 
 
 }
